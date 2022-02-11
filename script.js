@@ -170,7 +170,7 @@ class Game{
 			false,
 			this.viewMatrix,
 		);
-		gl.uniform4f(programInfo.uniformLocations.color, 1, 0, 0, 1);
+		gl.uniform4f(programInfo.uniformLocations.color, 1, 0.5, 0.3, 1);
 		// this.draw()
 		ugh(0)
 	}
