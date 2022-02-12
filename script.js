@@ -68,13 +68,15 @@ class Game{
 	
 		// Select the positionBuffer as the one to apply buffer
 		// operations to from here out.
-		const indexBuffer = gl.createBuffer();
-		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+		// const indexBuffer = gl.createBuffer();
+		// gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
 		const idx = new Uint8Array([0, 1, 3, 0, 2, 3]);
-		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, idx, gl.STATIC_DRAW)
+		// gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, idx, gl.STATIC_DRAW)
+
+		const indexBuffer = new IndexBuffer(idx, gl);
 	
-		const positionBuffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+		// const positionBuffer = gl.createBuffer();
+		// gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 	
 		// Now create an array of positions for the square.
 	
@@ -84,12 +86,12 @@ class Game{
 			 100,  0.0, 
 			 0.0,  0.0];
 		
-		
+		const positionBuffer = new VertexBuffer(positions, gl);
 	
 		// Now pass the list of positions into WebGL to build the
 		// shape. We do this by creating a Float32Array from the
 		// JavaScript array, then use it to fill the current buffer.
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+		// gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 	
 		return {
 			position: positionBuffer,
@@ -140,9 +142,11 @@ class Game{
 			const normalize = false;
 			const stride = 0;
 			const offset = 0;
-			gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.index)
+			// gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.index)
+			buffers.index.bind();
+			buffers.position.bind();
 	
-			gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
+			// gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
 			gl.vertexAttribPointer(
 				programInfo.attribLocations.vertexPosition,
 				numComponents,
