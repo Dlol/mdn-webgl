@@ -6,6 +6,7 @@ class Canvas{
 		this.c = document.createElement("canvas");
 		this.c.setAttribute("width", width);
 		this.c.setAttribute("height", height);
+		this.c.addEventListener("contextmenu", (e)=>{e.preventDefault();})
 		this.gl = this.c.getContext("webgl");
 		if (!this.gl) {
 			alert(

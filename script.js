@@ -18,31 +18,9 @@ class Game{
 			return;
 		}
 	
-		// Vertex shader program
-	
-		const vsSource = `
-		attribute vec4 aVertexPosition;
-		uniform mat4 uViewMatrix;
-		uniform mat4 uModelMatrix;
-		uniform mat4 uProjectionMatrix;
-		void main() {
-		  gl_Position = uProjectionMatrix * uModelMatrix * uViewMatrix * aVertexPosition;
-		}
-	  `;
-	
-		// Fragment shader program
-	
-		const fsSource = `
-		uniform mediump vec4 uColor;
-	
-		void main() {
-		  gl_FragColor = uColor;
-		}
-	  `;
-	
 		// Makes an instance of the Shader class to hold our shader
 		this.shader = new Shader(canvas);
-		this.shader.initShaderProgram(vsSource, fsSource);
+		this.shader.initShaderProgram(vs, fs);
 	
 		this.shader.addAttribLoc("vertexPosition", "aVertexPosition");
 		this.shader.addUniformLoc("projectionMatrix", "uProjectionMatrix");
@@ -104,6 +82,8 @@ class Game{
 		const { gl } = this.canvas;
 		const programInfo = this.shader.programInfo;
 		const buffers = this.buffers;
+		gl.enable(gl.BLEND)
+		gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
 		gl.clearColor(0.0, 0.0, 0.0, 1.0); // Clear to black, fully opaque
 		gl.clearDepth(1.0); // Clear everything
@@ -197,14 +177,30 @@ class Game{
 		if (curkeys[39]) {
 			pos.x += 5
 		}
+		if (mouseButton[0]) {
+			gl.uniform4f(programInfo.uniformLocations.color, 0, 0, 0, 1);
+			// console.log("down");
+		}
+		else{
+			gl.uniform4f(programInfo.uniformLocations.color, 1, 0.5, 0.3, 1);
+		}
+		if (mouseButton[2]) {
+			scale.x = 10;
+			document.getElementById('scaleX').value = 10;
+		}
+		if (mouseButton[1]) {
+			scale.y = 10;
+			document.getElementById('scaleY').value = 10;
+		}
 
-		gl.clearColor(1.0, 1.0, 1.0, 1.0);
+		gl.clearColor(1.0, 1.0, 1.0, 0.5);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 		mat4.fromRotationTranslationScale(
 			this.modelMatrix, // destination matrix
 			quat.create(),
-			[pos.x, pos.y, 0.0],
+			[mousePos.x - (50 * scale.x), 
+				mousePos.y - (50 * scale.y), 0.0],
 			[scale.x, scale.y, 0]
 		);
 
@@ -232,19 +228,19 @@ let scale = {
 	y: 1
 }
 
-let curkeys = [];
+// loads the shaders
+let vsResponse = await fetch("vert.shader");
+let fsResponse = await fetch("frag.shader");
+let shaderResponse = await fetch("assets/Basic.shader")
 
-window.addEventListener("keydown", (e) => {
-	curkeys[Number(e.keyCode)] = true;
-	// console.log(curkeys);
-});
-window.addEventListener("keyup", (e) => {
-	curkeys[Number(e.keyCode)] = false;
-});
+let shaderSource = await shaderResponse.text();
+
+console.log(shaderSource.indexOf(">>FRAG"));
+
 
 const canvas = new Canvas(640, 480);
 
-document.body.appendChild(canvas.c)
+document.getElementById('canvContainer').appendChild(canvas.c);
 
 const game = new Game(canvas);
 

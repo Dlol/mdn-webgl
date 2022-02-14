@@ -10,7 +10,7 @@
     <script src="Canvas.js"></script>
     <script src="Shader.js"></script>
     <script src="Buffers.js"></script>
-    <script src="script.js" defer></script>
+    <script src="Events.js"></script>
     <style>
       body, html{
         margin: 4px;
@@ -19,9 +19,11 @@
     </style>
   </head>
   <body>
+    <div id="canvContainer"></div>
+    <!-- <br> -->
     x: <input type="range" id="scaleX" value="1" min="0" max="4" onchange="scalerx(value)" step="0.01">
     y: <input type="range" id="scaleY" value="1" min="0" max="4" onchange="scalery(value)" step="0.01">
-    <br>
     <!-- <canvas id="glcanvas" width="640" height="480"></canvas> -->
+    <script src="script.js" type="module"></script>
   </body>
 </html>
