@@ -201,9 +201,11 @@ class Game{
 		gl.clearColor(1.0, 1.0, 1.0, 1.0);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-		mat4.fromTranslation(
+		mat4.fromRotationTranslationScale(
 			this.modelMatrix, // destination matrix
+			quat.create(),
 			[pos.x, pos.y, 0.0],
+			[scale.x, scale.y, 0]
 		);
 
 		gl.uniformMatrix4fv(
@@ -225,6 +227,11 @@ let pos = {
 	y: 5
 }
 
+let scale = {
+	x: 1,
+	y: 1
+}
+
 let curkeys = [];
 
 window.addEventListener("keydown", (e) => {
@@ -244,3 +251,11 @@ const game = new Game(canvas);
 game.main()
 
 // main();
+
+function scalerx(value) {
+	scale.x = value;
+}
+
+function scalery(value) {
+	scale.y = value;
+}

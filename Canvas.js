@@ -1,5 +1,5 @@
 // basically importing but in pre es2016 ig
-const { mat2, mat3, mat4, vec2, vec3, vec4 } = glMatrix;
+const { mat2, mat3, mat4, vec2, vec3, vec4, quat } = glMatrix;
 
 class Canvas{
 	constructor(width, height){

@@ -9,6 +9,10 @@ class VertexBuffer{
 	  bind() {
 		    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.buffer);
 	  }
+
+      unbind() {
+          this.gl.bindBuffer(this.gl.ARRAY_BUFFER, 0);
+      }
 }
 
 class IndexBuffer{
@@ -21,5 +25,9 @@ class IndexBuffer{
 
     bind() {
         this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, this.buffer)
+    }
+
+    unbind() {
+        this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, 0);
     }
 }
