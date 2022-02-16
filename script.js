@@ -20,7 +20,7 @@ class Game{
 	
 		// Makes an instance of the Shader class to hold our shader
 		this.shader = new Shader(canvas);
-		this.shader.initShaderProgram(vs, fs);
+		this.shader.initShaderProgram(shaders.vert, shaders.frag);
 	
 		this.shader.addAttribLoc("vertexPosition", "aVertexPosition");
 		this.shader.addUniformLoc("projectionMatrix", "uProjectionMatrix");
@@ -229,22 +229,40 @@ let scale = {
 }
 
 // loads the shaders
-let vsResponse = await fetch("vert.shader");
-let fsResponse = await fetch("frag.shader");
-let shaderResponse = await fetch("assets/Basic.shader")
+// let vsResponse = await fetch("vert.shader");
+// let fsResponse = await fetch("frag.shader");
 
-let shaderSource = await shaderResponse.text();
+let shaders = {};
+(async () => {
+	let shaderResponse = await fetch("assets/Basic.shader")
 
-console.log(shaderSource.indexOf(">>FRAG"));
+	let shaderSource = await shaderResponse.text();
+	
+	let sources = shaderSource.split(">>");
+	sources.forEach(element => {
+		if (element == '') {
+			return;
+		}
+		console.log(element);
+		let trimmed = element.replace('\r\n', '\n');
+		let type = trimmed.slice(0, trimmed.indexOf("<<"));
+		let source = trimmed.substring(trimmed.indexOf("<<") + 2);
+		shaders[type.toLowerCase()] = source;
+	})
+	
+	console.log(shaders);
+}) ();
 
 
-const canvas = new Canvas(640, 480);
+const canvas = new Canvas(window.innerWidth, window.innerHeight);
 
 document.getElementById('canvContainer').appendChild(canvas.c);
 
 const game = new Game(canvas);
 
-game.main()
+setTimeout(() => {
+	game.main()
+}, 30);
 
 // main();
 

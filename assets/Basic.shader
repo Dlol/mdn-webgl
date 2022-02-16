@@ -1,4 +1,4 @@
->>VERT
+>>VERT<<
 attribute vec4 aVertexPosition;
 uniform mat4 uViewMatrix;
 uniform mat4 uModelMatrix;
@@ -7,7 +7,7 @@ void main() {
 	gl_Position = uProjectionMatrix * uModelMatrix * uViewMatrix * aVertexPosition;
 }
 
->>FRAG
+>>FRAG<<
 uniform mediump vec4 uColor;
 
 void main() {

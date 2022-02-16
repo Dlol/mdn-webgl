@@ -13,17 +13,42 @@
     <script src="Events.js"></script>
     <style>
       body, html{
-        margin: 4px;
+        margin: 0;
+        overflow: hidden;
         padding: 0;
+      }
+      .ui{
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        background-color: rgba(0, 0, 0, 0.603);
+        display: flex;
+        flex-direction: column;
+        padding: 2px;
+        border-radius: 2px;
+      }
+      .row{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
       }
     </style>
   </head>
   <body>
     <div id="canvContainer"></div>
     <!-- <br> -->
-    x: <input type="range" id="scaleX" value="1" min="0" max="4" onchange="scalerx(value)" step="0.01">
-    y: <input type="range" id="scaleY" value="1" min="0" max="4" onchange="scalery(value)" step="0.01">
+    <div class="ui">
+      <div class="row">scale:</div>
+      <div class="row">
+        x: <input type="range" id="scaleX" value="1" min="0" max="4" onchange="scalerx(value)" step="0.01">
+        y: <input type="range" id="scaleY" value="1" min="0" max="4" onchange="scalery(value)" step="0.01">
+      </div>
+      <div class="row">
+        <button onclick="scalerx(1);scalery(1);scaleX.value = 1; scaleY.value = 1;">reset</button>
+      </div>
+    </div>
+    
     <!-- <canvas id="glcanvas" width="640" height="480"></canvas> -->
-    <script src="script.js" type="module"></script>
+    <script src="script.js"></script>
   </body>
 </html>
