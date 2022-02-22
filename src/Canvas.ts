@@ -2,6 +2,8 @@
 const { mat2, mat3, mat4, vec2, vec3, vec4, quat } = glMatrix;
 
 class Canvas{
+	c: HTMLCanvasElement;
+	gl: WebGLRenderingContext;
 	constructor(width, height){
 		this.c = document.createElement("canvas");
 		this.c.setAttribute("width", width);

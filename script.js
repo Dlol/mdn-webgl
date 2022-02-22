@@ -32,6 +32,8 @@ class Game{
 		// Here's where we call the routine that builds all the
 		// objects we'll be drawing.
 		this.buffers = this.initBuffers();
+
+		this.rectangle = new Rectangle({x:0, y:0}, {x:100, y:100}, this.canvas, this.canvas.gl, "black", this.shader);
 	
 		// console.log(shader);
 	
@@ -116,27 +118,27 @@ class Game{
 	
 		// Tell WebGL how to pull out the positions from the position
 		// buffer into the vertexPosition attribute.
-		{
-			const numComponents = 2;
-			const type = gl.FLOAT;
-			const normalize = false;
-			const stride = 0;
-			const offset = 0;
-			// gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.index)
-			buffers.index.bind();
-			buffers.position.bind();
+		// {
+		// 	const numComponents = 2;
+		// 	const type = gl.FLOAT;
+		// 	const normalize = false;
+		// 	const stride = 0;
+		// 	const offset = 0;
+		// 	// gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.index)
+		// 	buffers.index.bind();
+		// 	buffers.position.bind();
 	
-			// gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
-			gl.vertexAttribPointer(
-				programInfo.attribLocations.vertexPosition,
-				numComponents,
-				type,
-				normalize,
-				stride,
-				offset,
-			);
-			gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
-		}
+		// 	// gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
+		// 	gl.vertexAttribPointer(
+		// 		programInfo.attribLocations.vertexPosition,
+		// 		numComponents,
+		// 		type,
+		// 		normalize,
+		// 		stride,
+		// 		offset,
+		// 	);
+		// 	gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
+		// }
 	
 		// Tell WebGL to use our program when drawing
 	
@@ -209,7 +211,8 @@ class Game{
 			false,
 			this.modelMatrix,
 		);
-		gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_BYTE, 0)
+		// gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_BYTE, 0)
+		this.rectangle.draw();
 	}
 }
 

@@ -1,5 +1,8 @@
 class ProgramInfo{
-	constructor(program, attribLocations = {}, uniformLocations = {}) {
+	program: WebGLProgram;
+	attribLocations: {};
+	uniformLocations: {};
+	constructor(program: WebGLProgram, attribLocations = {}, uniformLocations = {}) {
 		this.program = program;
 		this.attribLocations = attribLocations;
 		this.uniformLocations = uniformLocations;
@@ -7,19 +10,24 @@ class ProgramInfo{
 }
 
 class Shader{
-	constructor(canvas){
+	canvas: HTMLCanvasElement;
+	programInfo: ProgramInfo;
+	constructor(canvas: HTMLCanvasElement){
 		this.canvas = canvas;
 	}
 
-	addUniformLoc(name, loc=null){
+	addUniformLoc(name:string, loc?:string){
 		if (loc == null) {
 			loc = name
 		}
 
 		this.programInfo.uniformLocations[name] = this.canvas.gl.getUniformLocation(this.program, loc);
 	}
+	program(program: any, loc: null): any {
+		throw new Error("Method not implemented.");
+	}
 
-	addAttribLoc(name, loc=null){
+	addAttribLoc(name:string, loc?:string){
 		if (loc == null) {
 			loc = name
 		}
@@ -27,8 +35,8 @@ class Shader{
 		// console.log(this.canvas.gl.getUniformLocation(this.program, loc));
 	}
 
-	initShaderProgram(vsSource, fsSource) {
-		const {gl} = this.canvas;
+	initShaderProgram(vsSource: string, fsSource:string) {
+		const { gl } = this.canvas;
 		const vertexShader = this.loadShader(gl, gl.VERTEX_SHADER, vsSource);
 		const fragmentShader = this.loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
 	
@@ -60,7 +68,7 @@ class Shader{
 	// creates a shader of the given type, uploads the source and
 	// compiles it.
 	//
-	loadShader(gl, type, source) {
+	loadShader(gl: WebGLRenderingContext, type, source) {
 		const shader = gl.createShader(type);
 	
 		// Send the source to the shader object
