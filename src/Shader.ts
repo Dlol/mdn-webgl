@@ -10,9 +10,9 @@ class ProgramInfo{
 }
 
 class Shader{
-	canvas: HTMLCanvasElement;
-	programInfo: ProgramInfo;
-	constructor(canvas: HTMLCanvasElement){
+	canvas: Canvas;
+	programInfo: ProgramInfo | undefined;
+	constructor(canvas: Canvas){
 		this.canvas = canvas;
 	}
 

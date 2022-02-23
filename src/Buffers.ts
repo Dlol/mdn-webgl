@@ -1,7 +1,7 @@
 class VertexBuffer{
 	buffer: WebGLBuffer | null;
 	gl: WebGL2RenderingContext;
-	constructor(data:Array<Number>, gl:WebGL2RenderingContext){
+	constructor(data:Number[], gl:WebGL2RenderingContext){
 		this.gl = gl;
 		this.buffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
@@ -20,7 +20,7 @@ class VertexBuffer{
 class IndexBuffer{
 	gl: any;
 	buffer: any;
-	constructor(data:Array<Number>, gl:WebGL2RenderingContext){
+	constructor(data:Number[], gl:WebGL2RenderingContext){
 		this.gl = gl;
 		this.buffer = gl.createBuffer();
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.buffer);

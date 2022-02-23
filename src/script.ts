@@ -2,7 +2,13 @@
 // const { mat2, mat3, mat4, vec2, vec3, vec4 } = glMatrix;
 
 class Game{
-	constructor(canvas){
+	canvas: any;
+	shader: Shader | undefined;
+	rectangle: Rectangle | undefined;
+	buffers: any;
+	modelMatrix: any;
+	viewMatrix: any;
+	constructor(canvas: Canvas){
 		this.canvas = canvas;
 	}
 
@@ -28,12 +34,8 @@ class Game{
 		this.shader.addUniformLoc("modelMatrix", "uModelMatrix");
 		this.shader.addUniformLoc("color", "uColor");
 		console.log(this.shader.programInfo);
-	
-		// Here's where we call the routine that builds all the
-		// objects we'll be drawing.
-		this.buffers = this.initBuffers();
 
-		this.rectangle = new Rectangle({x:0, y:0}, {x:100, y:100}, this.canvas, this.canvas.gl, "black", this.shader);
+		this.rectangle = new Rectangle({x:0, y:0}, {x:10, y:20}, this.canvas, this.canvas.gl, {r: 1, g: 0, b: 1, a: 1}, this.shader);
 	
 		// console.log(shader);
 	
@@ -41,43 +43,6 @@ class Game{
 		this.drawScene();
 	}
 
-	initBuffers() {
-		const {gl} = this.canvas;
-		// Create a buffer for the square's positions.
-	
-	
-		// Select the positionBuffer as the one to apply buffer
-		// operations to from here out.
-		// const indexBuffer = gl.createBuffer();
-		// gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-		const idx = new Uint8Array([0, 1, 3, 0, 2, 3]);
-		// gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, idx, gl.STATIC_DRAW)
-
-		const indexBuffer = new IndexBuffer(idx, gl);
-	
-		// const positionBuffer = gl.createBuffer();
-		// gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-	
-		// Now create an array of positions for the square.
-	
-		const positions = [
-			 100,  100, 
-			 0.0,  100, 
-			 100,  0.0, 
-			 0.0,  0.0];
-		
-		const positionBuffer = new VertexBuffer(positions, gl);
-	
-		// Now pass the list of positions into WebGL to build the
-		// shape. We do this by creating a Float32Array from the
-		// JavaScript array, then use it to fill the current buffer.
-		// gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
-	
-		return {
-			position: positionBuffer,
-			index: indexBuffer
-		};
-	}
 
 	drawScene() {
 
