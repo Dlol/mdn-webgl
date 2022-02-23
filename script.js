@@ -201,8 +201,8 @@ class Game{
 		mat4.fromRotationTranslationScale(
 			this.modelMatrix, // destination matrix
 			quat.create(),
-			[mousePos.x - (50 * scale.x), 
-				mousePos.y - (50 * scale.y), 0.0],
+			[mousePos.x - (this.rectangle.size.x / 2 * scale.x), 
+				mousePos.y - (this.rectangle.size.y / 2 * scale.y), 0.0],
 			[scale.x, scale.y, 0]
 		);
 
