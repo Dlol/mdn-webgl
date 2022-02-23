@@ -1,28 +1,41 @@
-type vector2 = {
+type Vec2 = {
 	x: number;
 	y: number;
 };
 
+type Vec3 = {
+	x: number;
+	y: number;
+	z: number;
+}
+
+type Color = {
+	r: number;
+	g: number;
+	b: number;
+	a: number;
+}
+
 interface Shape{
-	position: vector2;
-	size: vector2;
+	position: Vec2;
+	size: Vec2;
 	canvas: HTMLCanvasElement;
 	ctx: WebGL2RenderingContext;
-	color: string;
+	color: Color;
 	shader: Shader;
 	draw(): void;
 }
 class Rectangle implements Shape{
-	position: vector2;
-	size: vector2;
+	position: Vec2;
+	size: Vec2;
 	canvas: HTMLCanvasElement;
 	ctx: WebGL2RenderingContext;
-	color: string;
+	color: Color;
 	shader: Shader;
 	vb: VertexBuffer;
 	ib: IndexBuffer;
 
-	constructor(pos: vector2, size: vector2, canvas: HTMLCanvasElement, ctx: WebGL2RenderingContext, color: string, shader: Shader) {
+	constructor(pos: Vec2, size: Vec2, canvas: HTMLCanvasElement, ctx: WebGL2RenderingContext, color: Color, shader: Shader) {
 		this.position = pos;
 		this.size = size;
 		this.canvas = canvas;
@@ -45,6 +58,7 @@ class Rectangle implements Shape{
 
 	draw():void {
 		const {programInfo} = this.shader;
+		this.ctx.uniform4f(programInfo.uniformLocations.color, this.color.r, this.color.g, this.color.b, this.color.a);
 		this.ib.bind();
 		this.vb.bind();
 

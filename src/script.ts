@@ -181,17 +181,17 @@ class Game{
 	}
 }
 
-function ugh(delta) {
+function ugh(delta: number) {
 	game.draw(delta)
 	window.requestAnimationFrame(ugh)
 }
 
-let pos = {
+let pos:Vec2 = {
 	x: 0,
 	y: 5
 }
 
-let scale = {
+let scale:Vec2 = {
 	x: 1,
 	y: 1
 }
@@ -234,10 +234,10 @@ setTimeout(() => {
 
 // main();
 
-function scalerx(value) {
+function scalerx(value: number) {
 	scale.x = value;
 }
 
-function scalery(value) {
+function scalery(value: number) {
 	scale.y = value;
 }
