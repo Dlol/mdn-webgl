@@ -19,7 +19,7 @@
         padding: 0;
       }
       canvas{
-        cursor: none;
+        /* cursor: none; */
       }
       .ui{
         position: absolute;
@@ -42,14 +42,6 @@
     <div id="canvContainer"></div>
     <!-- <br> -->
     <div class="ui">
-      <div class="row">scale:</div>
-      <div class="row">
-        x: <input type="range" id="scaleX" value="1" min="0" max="4" onchange="scalerx(value)" step="0.01">
-        y: <input type="range" id="scaleY" value="1" min="0" max="4" onchange="scalery(value)" step="0.01">
-      </div>
-      <div class="row">
-        <button onclick="scalerx(1);scalery(1);scaleX.value = 1; scaleY.value = 1;">reset</button>
-      </div>
     </div>
     
     <!-- <canvas id="glcanvas" width="640" height="480"></canvas> -->

@@ -4,7 +4,7 @@ let mousePos = {
 }
 
 let curkeys = [];
-let mouseButton = [];
+let mouseButton: boolean[] = [];
 
 window.addEventListener("keydown", (e) => {
 	curkeys[Number(e.keyCode)] = true;

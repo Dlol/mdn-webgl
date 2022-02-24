@@ -1,6 +1,33 @@
 // basically importing but in pre es2016 ig
 // const { mat2, mat3, mat4, vec2, vec3, vec4 } = glMatrix;
 
+class Cell {
+	enabled: boolean;
+	canvas: Canvas;
+	pos: Vec2;
+	dimen: Vec2;
+	tile: Rectangle;
+
+	constructor(canvas:Canvas, pos:Vec2, dimensions:Vec2, shader: Shader) {
+		this.enabled = false;
+		this.canvas = canvas;
+		this.pos = pos;
+		this.dimen = dimensions;
+		this.tile = new Rectangle(pos, dimensions, canvas.c, canvas.gl, Colors.white, shader);
+	}
+
+	draw(){
+		if (this.enabled) {
+			this.tile.color = Colors.white;
+		}
+		else{
+			this.tile.color = Colors.black;
+		}
+
+		this.tile.draw();
+	}
+}
+
 class Game{
 	canvas: any;
 	shader: Shader | undefined;
@@ -8,9 +35,12 @@ class Game{
 	buffers: any;
 	modelMatrix: any;
 	viewMatrix: any;
-	grid: Rectangle[];
+	grid: Cell[];
+	counter: number;
+	gridDimen: any;
 	constructor(canvas: Canvas){
 		this.canvas = canvas;
+		this.counter = 0;
 	}
 
 	main() {
@@ -37,20 +67,19 @@ class Game{
 		console.log(this.shader.programInfo);
 
 		this.grid = [];
-		let gridDimen:Vec2 = {
-			x: 6,
-			y: 4
+		this.gridDimen = {
+			x: 32,
+			y: 18
 		} 
 		let frac:Vec2 = {
-			x: canvas.c.width / gridDimen.x,
-			y: canvas.c.height / gridDimen.y
+			x: canvas.c.width / this.gridDimen.x,
+			y: canvas.c.height / this.gridDimen.y
 		} 
-		for (let index = 0; index < gridDimen.x * gridDimen.y; index++) {
-			this.grid.push(new Rectangle(
-				{x: (index % gridDimen.x) * frac.x, y: Math.floor(index/gridDimen.x) * frac.y}, 
-				{x: frac.x - 4, y: frac.y - 4}, 
-				this.canvas.c, this.canvas.gl, 
-				{r: 1, g:1, b:1, a:1}, this.shader));
+		for (let index = 0; index < this.gridDimen.x * this.gridDimen.y; index++) {
+			this.grid.push(new Cell(
+				this.canvas,
+				{x: (index % this.gridDimen.x) * frac.x, y: Math.floor(index/this.gridDimen.x) * frac.y}, 
+				{x: frac.x - 4, y: frac.y - 4}, this.shader));
 			// console.table({x: (index % gridDimen.x) * frac.x, y: Math.floor(index/gridDimen.y) * frac.y});	
 		}
 		
@@ -72,7 +101,7 @@ class Game{
 		gl.enable(gl.BLEND)
 		gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
-		gl.clearColor(0.0, 0.0, 0.0, 1.0); // Clear to black, fully opaque
+		gl.clearColor(0.13, 0.0, 0.24, 1.0); // Clear to black, fully opaque
 		gl.clearDepth(1.0); // Clear everything
 	
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -147,9 +176,21 @@ class Game{
 		// );
 		// gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_BYTE, 0)
 		// this.rectangle.draw();
+
+		let index = Math.floor(mousePos.x / canvas.c.clientWidth * this.gridDimen.x) + (Math.floor(mousePos.y / canvas.c.clientHeight * this.gridDimen.y) * this.gridDimen.x)
+		// console.log(index);
+
+		if (mouseButton[0]) {
+			this.grid[index].enabled = true;
+		}
+		if (mouseButton[2]) {
+			this.grid[index].enabled = false;
+		}
+
 		this.grid.forEach(element => {
 			element.draw();
 		});
+		
 	}
 }
 
