@@ -8,6 +8,7 @@ class Game{
 	buffers: any;
 	modelMatrix: any;
 	viewMatrix: any;
+	grid: Rectangle[];
 	constructor(canvas: Canvas){
 		this.canvas = canvas;
 	}
@@ -35,7 +36,26 @@ class Game{
 		this.shader.addUniformLoc("color", "uColor");
 		console.log(this.shader.programInfo);
 
-		this.rectangle = new Rectangle({x:0, y:0}, {x:10, y:20}, this.canvas, this.canvas.gl, {r: 1, g: 0, b: 1, a: 1}, this.shader);
+		this.grid = [];
+		let gridDimen:Vec2 = {
+			x: 6,
+			y: 4
+		} 
+		let frac:Vec2 = {
+			x: canvas.c.width / gridDimen.x,
+			y: canvas.c.height / gridDimen.y
+		} 
+		for (let index = 0; index < gridDimen.x * gridDimen.y; index++) {
+			this.grid.push(new Rectangle(
+				{x: (index % gridDimen.x) * frac.x, y: Math.floor(index/gridDimen.x) * frac.y}, 
+				{x: frac.x - 4, y: frac.y - 4}, 
+				this.canvas.c, this.canvas.gl, 
+				{r: 1, g:1, b:1, a:1}, this.shader));
+			// console.table({x: (index % gridDimen.x) * frac.x, y: Math.floor(index/gridDimen.y) * frac.y});	
+		}
+		
+
+		this.rectangle = new Rectangle({x:0, y:0}, {x:10, y:20}, this.canvas, this.canvas.gl, {r: 0, g: 0, b: 1, a: 1}, this.shader);
 	
 		// console.log(shader);
 	
@@ -54,10 +74,6 @@ class Game{
 
 		gl.clearColor(0.0, 0.0, 0.0, 1.0); // Clear to black, fully opaque
 		gl.clearDepth(1.0); // Clear everything
-		// gl.enable(gl.DEPTH_TEST); // Enable depth testing
-		// gl.depthFunc(gl.LEQUAL); // Near things obscure far things
-	
-		// Clear the canvas before we start drawing on it.
 	
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	
@@ -81,29 +97,6 @@ class Game{
 			[pos.x, pos.y, 0.0],
 		); // amount to translate
 	
-		// Tell WebGL how to pull out the positions from the position
-		// buffer into the vertexPosition attribute.
-		// {
-		// 	const numComponents = 2;
-		// 	const type = gl.FLOAT;
-		// 	const normalize = false;
-		// 	const stride = 0;
-		// 	const offset = 0;
-		// 	// gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.index)
-		// 	buffers.index.bind();
-		// 	buffers.position.bind();
-	
-		// 	// gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
-		// 	gl.vertexAttribPointer(
-		// 		programInfo.attribLocations.vertexPosition,
-		// 		numComponents,
-		// 		type,
-		// 		normalize,
-		// 		stride,
-		// 		offset,
-		// 	);
-		// 	gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
-		// }
 	
 		// Tell WebGL to use our program when drawing
 	
@@ -121,63 +114,42 @@ class Game{
 			false,
 			this.viewMatrix,
 		);
+		gl.uniformMatrix4fv(
+			programInfo.uniformLocations.modelMatrix,
+			false,
+			this.modelMatrix
+		)
 		gl.uniform4f(programInfo.uniformLocations.color, 1, 0.5, 0.3, 1);
 		// this.draw()
 		ugh(0)
 	}
 
-	draw(delta) {
+	draw(delta: number) {
 		// console.log(this);
 		const { gl } = this.canvas;
 		const programInfo = this.shader.programInfo;
-		const buffers = this.buffers;
-		// console.log(curkeys);
-		if (curkeys[38]) {
-			pos.y -= 5
-		}
-		if (curkeys[40]) {
-			pos.y += 5
-		}
-		if (curkeys[37]) {
-			pos.x -= 5
-		}
-		if (curkeys[39]) {
-			pos.x += 5
-		}
-		if (mouseButton[0]) {
-			gl.uniform4f(programInfo.uniformLocations.color, 0, 0, 0, 1);
-			// console.log("down");
-		}
-		else{
-			gl.uniform4f(programInfo.uniformLocations.color, 1, 0.5, 0.3, 1);
-		}
-		if (mouseButton[2]) {
-			scale.x = 10;
-			document.getElementById('scaleX').value = 10;
-		}
-		if (mouseButton[1]) {
-			scale.y = 10;
-			document.getElementById('scaleY').value = 10;
-		}
 
-		gl.clearColor(1.0, 1.0, 1.0, 0.5);
+		gl.clearColor(0.0, 0.0, 0.0, 1.0);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-		mat4.fromRotationTranslationScale(
-			this.modelMatrix, // destination matrix
-			quat.create(),
-			[mousePos.x - (this.rectangle.size.x / 2 * scale.x), 
-				mousePos.y - (this.rectangle.size.y / 2 * scale.y), 0.0],
-			[scale.x, scale.y, 0]
-		);
+		// mat4.fromRotationTranslationScale(
+		// 	this.modelMatrix, // destination matrix
+		// 	quat.create(),
+		// 	[mousePos.x - (this.rectangle.size.x / 2 * scale.x), 
+		// 		mousePos.y - (this.rectangle.size.y / 2 * scale.y), 0.0],
+		// 	[scale.x, scale.y, 0]
+		// );
 
-		gl.uniformMatrix4fv(
-			programInfo.uniformLocations.modelMatrix,
-			false,
-			this.modelMatrix,
-		);
+		// gl.uniformMatrix4fv(
+		// 	programInfo.uniformLocations.modelMatrix,
+		// 	false,
+		// 	this.modelMatrix,
+		// );
 		// gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_BYTE, 0)
-		this.rectangle.draw();
+		// this.rectangle.draw();
+		this.grid.forEach(element => {
+			element.draw();
+		});
 	}
 }
 
@@ -199,6 +171,11 @@ let scale:Vec2 = {
 // loads the shaders
 // let vsResponse = await fetch("vert.shader");
 // let fsResponse = await fetch("frag.shader");
+const canvas = new Canvas(window.innerWidth, window.innerHeight);
+
+document.getElementById('canvContainer').appendChild(canvas.c);
+
+const game = new Game(canvas);
 
 let shaders = {};
 (async () => {
@@ -219,18 +196,11 @@ let shaders = {};
 	})
 	
 	console.log(shaders);
+	game.main()
 }) ();
 
 
-const canvas = new Canvas(window.innerWidth, window.innerHeight);
 
-document.getElementById('canvContainer').appendChild(canvas.c);
-
-const game = new Game(canvas);
-
-setTimeout(() => {
-	game.main()
-}, 30);
 
 // main();
 

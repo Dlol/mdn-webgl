@@ -35,7 +35,7 @@ class Rectangle implements Shape{
 	vb: VertexBuffer;
 	ib: IndexBuffer;
 
-	constructor(pos: Vec2, size: Vec2, canvas: HTMLCanvasElement, ctx: WebGL2RenderingContext, color: Color, shader: Shader) {
+	constructor(pos: Vec2, size: Vec2, canvas: HTMLCanvasElement, ctx: WebGL2RenderingContext, color: Color, shader: Shader, dynamic:boolean = false) {
 		this.position = pos;
 		this.size = size;
 		this.canvas = canvas;
@@ -52,12 +52,17 @@ class Rectangle implements Shape{
 			0, 1, 2,
 			3, 1, 2
 		]
-		this.ib = new IndexBuffer(idx, ctx);
-		this.vb = new VertexBuffer(positions ,ctx);
+		let type = ctx.STATIC_DRAW;
+		if (dynamic) {
+			type = ctx.DYNAMIC_DRAW;
+		}
+		this.ib = new IndexBuffer(idx, ctx, type);
+		this.vb = new VertexBuffer(positions, ctx, type);
 	}
 
 	draw():void {
 		const {programInfo} = this.shader;
+		this.shader.bind();
 		this.ctx.uniform4f(programInfo.uniformLocations.color, this.color.r, this.color.g, this.color.b, this.color.a);
 		this.ib.bind();
 		this.vb.bind();

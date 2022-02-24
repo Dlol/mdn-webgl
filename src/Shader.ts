@@ -92,4 +92,12 @@ class Shader{
 	
 		return shader;
 	}
+
+	bind(){
+		this.canvas.gl.useProgram(this.program);
+	}
+
+	unbind(){
+		this.canvas.gl.useProgram(0);
+	}
 }
