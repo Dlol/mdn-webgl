@@ -1,31 +1,3 @@
-type Vec2 = {
-	x: number;
-	y: number;
-};
-
-type Vec3 = {
-	x: number;
-	y: number;
-	z: number;
-}
-
-type Color = {
-	r: number;
-	g: number;
-	b: number;
-	a: number;
-}
-
-class Colors {
-	static get white(): Color{
-		return {r:1, g:1, b:1, a:1};
-	}
-
-	static get black(): Color{
-		return {r:0, g:0, b:0, a:1};
-	}
-}
-
 interface Shape{
 	position: Vec2;
 	size: Vec2;
@@ -112,9 +84,9 @@ class Triangle implements Shape {
 		this.color = color;
 		this.shader = shader;
 		let positions = [
-			0 + pos.x, 0 + pos.y,
-			1 * size.x + pos.x, 0 + pos.y,
-			1 * size.x + pos.x * 0.5, 1 * size.y + pos.y
+			0 + pos.x, 1 * size.y + pos.y,
+			1 * size.x + pos.x, 1 * size.y + pos.y,
+			1 * size.x + pos.x * 0.5, 0 + pos.y
 		]
 		let idx = [
 			0, 1, 2

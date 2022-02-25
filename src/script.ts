@@ -38,6 +38,7 @@ class Game{
 	grid: Cell[];
 	counter: number;
 	gridDimen: any;
+	shapeTest: Shape;
 	constructor(canvas: Canvas){
 		this.canvas = canvas;
 		this.counter = 0;
@@ -75,16 +76,16 @@ class Game{
 			x: canvas.c.width / this.gridDimen.x,
 			y: canvas.c.height / this.gridDimen.y
 		} 
-		for (let index = 0; index < this.gridDimen.x * this.gridDimen.y; index++) {
-			this.grid.push(new Cell(
-				this.canvas,
-				{x: (index % this.gridDimen.x) * frac.x, y: Math.floor(index/this.gridDimen.x) * frac.y}, 
-				{x: frac.x - 4, y: frac.y - 4}, this.shader));
-			// console.table({x: (index % gridDimen.x) * frac.x, y: Math.floor(index/gridDimen.y) * frac.y});	
-		}
+		// for (let index = 0; index < this.gridDimen.x * this.gridDimen.y; index++) {
+		// 	this.grid.push(new Cell(
+		// 		this.canvas,
+		// 		{x: (index % this.gridDimen.x) * frac.x, y: Math.floor(index/this.gridDimen.x) * frac.y}, 
+		// 		{x: frac.x - 4, y: frac.y - 4}, this.shader));
+		// 	// console.table({x: (index % gridDimen.x) * frac.x, y: Math.floor(index/gridDimen.y) * frac.y});	
+		// }
 		
 
-		this.rectangle = new Rectangle({x:0, y:0}, {x:10, y:20}, this.canvas, this.canvas.gl, {r: 0, g: 0, b: 1, a: 1}, this.shader);
+		this.shapeTest = new Triangle({x:20, y:20}, {x:20, y:20}, canvas.c, canvas.gl, Colors.white, this.shader);
 	
 		// console.log(shader);
 	
@@ -175,17 +176,17 @@ class Game{
 		// 	this.modelMatrix,
 		// );
 		// gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_BYTE, 0)
-		// this.rectangle.draw();
+		this.shapeTest.draw();
 
-		let index = Math.floor(mousePos.x / canvas.c.clientWidth * this.gridDimen.x) + (Math.floor(mousePos.y / canvas.c.clientHeight * this.gridDimen.y) * this.gridDimen.x)
+		// let index = Math.floor(mousePos.x / canvas.c.clientWidth * this.gridDimen.x) + (Math.floor(mousePos.y / canvas.c.clientHeight * this.gridDimen.y) * this.gridDimen.x)
 		// console.log(index);
 
-		if (mouseButton[0]) {
-			this.grid[index].enabled = true;
-		}
-		if (mouseButton[2]) {
-			this.grid[index].enabled = false;
-		}
+		// if (mouseButton[0]) {
+		// 	this.grid[index].enabled = true;
+		// }
+		// if (mouseButton[2]) {
+		// 	this.grid[index].enabled = false;
+		// }
 
 		this.grid.forEach(element => {
 			element.draw();
