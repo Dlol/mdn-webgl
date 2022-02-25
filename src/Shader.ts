@@ -100,4 +100,26 @@ class Shader{
 	unbind(){
 		this.canvas.gl.useProgram(0);
 	}
+
+	static async Load(url:string): Promise<object>{
+		let shaderResponse = await fetch("assets/Basic.shader")
+
+		let shaderSource = await shaderResponse.text();
+		let shaders:any = {};
+		let sources = shaderSource.split(">>");
+		sources.forEach(element => {
+			if (element == '') {
+				return;
+			}
+			console.log(element);
+			let trimmed = element.replace('\r\n', '\n');
+			let type = trimmed.slice(0, trimmed.indexOf("<<"));
+			let source = trimmed.substring(trimmed.indexOf("<<") + 2);
+			shaders[type.toLowerCase()] = source;
+		})
+		return new Promise<object>((resolve, reject) => {
+			resolve(shaders);
+		})
+	}
+	
 }

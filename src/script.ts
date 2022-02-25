@@ -76,16 +76,16 @@ class Game{
 			x: canvas.c.width / this.gridDimen.x,
 			y: canvas.c.height / this.gridDimen.y
 		} 
-		// for (let index = 0; index < this.gridDimen.x * this.gridDimen.y; index++) {
-		// 	this.grid.push(new Cell(
-		// 		this.canvas,
-		// 		{x: (index % this.gridDimen.x) * frac.x, y: Math.floor(index/this.gridDimen.x) * frac.y}, 
-		// 		{x: frac.x - 4, y: frac.y - 4}, this.shader));
-		// 	// console.table({x: (index % gridDimen.x) * frac.x, y: Math.floor(index/gridDimen.y) * frac.y});	
-		// }
+		for (let index = 0; index < this.gridDimen.x * this.gridDimen.y; index++) {
+			this.grid.push(new Cell(
+				this.canvas,
+				{x: (index % this.gridDimen.x) * frac.x, y: Math.floor(index/this.gridDimen.x) * frac.y}, 
+				{x: frac.x - 4, y: frac.y - 4}, this.shader));
+			// console.table({x: (index % gridDimen.x) * frac.x, y: Math.floor(index/gridDimen.y) * frac.y});	
+		}
 		
 
-		this.shapeTest = new Triangle({x:20, y:20}, {x:20, y:20}, canvas.c, canvas.gl, Colors.white, this.shader);
+		this.shapeTest = new TextureRect({x:20, y:20}, {x:20, y:20}, canvas.c, canvas.gl, Colors.red, this.shader, true);
 	
 		// console.log(shader);
 	
@@ -176,21 +176,23 @@ class Game{
 		// 	this.modelMatrix,
 		// );
 		// gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_BYTE, 0)
-		this.shapeTest.draw();
 
-		// let index = Math.floor(mousePos.x / canvas.c.clientWidth * this.gridDimen.x) + (Math.floor(mousePos.y / canvas.c.clientHeight * this.gridDimen.y) * this.gridDimen.x)
+		let index = Math.floor(mousePos.x / canvas.c.clientWidth * this.gridDimen.x) + (Math.floor(mousePos.y / canvas.c.clientHeight * this.gridDimen.y) * this.gridDimen.x)
 		// console.log(index);
 
-		// if (mouseButton[0]) {
-		// 	this.grid[index].enabled = true;
-		// }
-		// if (mouseButton[2]) {
-		// 	this.grid[index].enabled = false;
-		// }
+		if (mouseButton[0]) {
+			this.grid[index].enabled = true;
+		}
+		if (mouseButton[2]) {
+			this.grid[index].enabled = false;
+		}
 
 		this.grid.forEach(element => {
 			element.draw();
 		});
+
+		this.shapeTest.draw();
+
 		
 	}
 }
@@ -219,27 +221,34 @@ document.getElementById('canvContainer').appendChild(canvas.c);
 
 const game = new Game(canvas);
 
-let shaders = {};
-(async () => {
-	let shaderResponse = await fetch("assets/Basic.shader")
+let shaders:any = {};
+// (async () => {
+// 	let shaderResponse = await fetch("assets/Basic.shader")
 
-	let shaderSource = await shaderResponse.text();
+// 	let shaderSource = await shaderResponse.text();
 	
-	let sources = shaderSource.split(">>");
-	sources.forEach(element => {
-		if (element == '') {
-			return;
-		}
-		console.log(element);
-		let trimmed = element.replace('\r\n', '\n');
-		let type = trimmed.slice(0, trimmed.indexOf("<<"));
-		let source = trimmed.substring(trimmed.indexOf("<<") + 2);
-		shaders[type.toLowerCase()] = source;
-	})
+// 	let sources = shaderSource.split(">>");
+// 	sources.forEach(element => {
+// 		if (element == '') {
+// 			return;
+// 		}
+// 		console.log(element);
+// 		let trimmed = element.replace('\r\n', '\n');
+// 		let type = trimmed.slice(0, trimmed.indexOf("<<"));
+// 		let source = trimmed.substring(trimmed.indexOf("<<") + 2);
+// 		shaders[type.toLowerCase()] = source;
+// 	})
 	
+// 	console.log(shaders);
+// 	game.main()
+// }) ();
+
+Shader.Load("assets/Basic.shader").then((val)=>{
+	shaders = val;
 	console.log(shaders);
-	game.main()
-}) ();
+	
+	game.main();
+}).catch(()=>{alert("um oops")});
 
 
 
